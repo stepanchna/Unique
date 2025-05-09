@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Емкость населения</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+
+    <header class="container">
+        <h1>Емкость уникальныйх пользователей</h1>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Города/регионы с поиском -->
+            <div class="form">
+                <p class="prompt">Введите необходимые города, области или регионы — можно указать несколько, чтобы
+                    рассчитать емкость аудитории.</p>
+
+                <div class="city-selector">
+                    <label class="city-selector__label" for="city">Города и регионы:</label>
+                    <input type="text" class="city-selector__input" placeholder="Начните вводить город..."
+                        autocomplete="off">
+                    <ul class="city-selector__list"></ul>
+
+
+                    <label for="gender">Пол:</label>
+                    <select class="gender" name="gender">
+                        <option value="М">Мужчины</option>
+                        <option value="Ж">Женщины</option>
+                        <option value="МЖ">М/Ж</option>
+                    </select>
+
+                    <label for="age-from">Возраст от:</label>
+                    <input type="number" class="age-from" name="age-from" min="0" max="100">
+
+                    <label for="age-to"> до:</label>
+                    <input type="number" class="age-to" name="age-to" min="0" max="100">
+                </div>
+            </div>
+
+            <!-- Кнопка -->
+            <button class="button calculate">Рассчитать емкость</button>
+            <button class="button reset">Обновить</button>
+
+        </div>
+
+        <!-- Результат -->
+        <div class="container">
+            <section class="result">
+                <h2 class="section__result">Итоговая емкость</h2>
+
+                <!-- Общая сумма -->
+                <p class="capacity-total">—</p>
+
+                <!-- Таблица по выбранным фильтрам -->
+                <table class="result__table">
+                    <thead>
+                        <tr>
+                            <th>Город / Регион &nbsp;&nbsp;</th>
+                            <th>Пол &nbsp;&nbsp;</th>
+                            <th>Возраст &nbsp;&nbsp;</th>
+                            <th>Емкость &nbsp;&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </section>
+        </div>
+    </main>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
