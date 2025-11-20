@@ -8,13 +8,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 
 <body>
 
     <header class="container">
-        <h1>Емкость уникальных пользователей</h1>
+        <h1>Емкость уникальныйх пользователей в России</h1>
     </header>
 
     <main>
@@ -27,36 +27,44 @@
 
                 <div class="city-selector">
                     <label class="city-selector__label" for="city">Города и регионы:</label>
-                    <input type="text" class="city-selector__input" placeholder="Начните вводить город..."
+                    <input type="text" class="city-selector__input" placeholder="Введите город"
                         autocomplete="off">
                     <ul class="city-selector__list"></ul>
 
-
                     <label for="gender">Пол:</label>
                     <select class="gender" name="gender">
+                        <option value="МЖ">М/Ж</option>
                         <option value="М">Мужчины</option>
                         <option value="Ж">Женщины</option>
-                        <option value="МЖ">М/Ж</option>
                     </select>
 
-                    <label for="age-from">Возраст от:</label>
+                    <!-- <label for="age-from">Возраст от:</label>
                     <input type="number" class="age-from" name="age-from" min="0" max="100">
 
                     <label for="age-to"> до:</label>
-                    <input type="number" class="age-to" name="age-to" min="0" max="100">
+                    <input type="number" class="age-to" name="age-to" min="0" max="100"> -->
+
+                    <label for="age-from">Возраст от:</label>
+                    <input type="number" class="age-from" name="age-from" min="0" max="75"
+                     placeholder="0" title="Возраст возможен от 0 до 70 лет">
+
+                    <label for="age-to">до:</label>
+                    <input type="number" class="age-to" name="age-to" min="0" max="75"
+                     placeholder="70" title="Возраст возможен от 0 до 70 лет">
+
                 </div>
             </div>
 
             <!-- Кнопка -->
             <button class="button calculate">Рассчитать емкость</button>
-            <button class="button reset">Сбросить</button>
+            <button class="button reset">Обновить</button>
 
         </div>
 
         <!-- Результат -->
         <div class="container">
             <section class="result">
-                <h2 class="section__result">Итоговая емкость</h2>
+                <h2 class="section__result">Итоговая емкость тотал</h2>
 
                 <!-- Общая сумма -->
                 <p class="capacity-total">—</p>
@@ -68,7 +76,7 @@
                             <th>Город / Регион &nbsp;&nbsp;</th>
                             <th>Пол &nbsp;&nbsp;</th>
                             <th>Возраст &nbsp;&nbsp;</th>
-                            <th>Емкость &nbsp;&nbsp;</th>
+                            <th>Емкость тотал &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -77,7 +85,7 @@
             </section>
         </div>
     </main>
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
 </body>
 
 </html>
