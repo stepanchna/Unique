@@ -35691,93 +35691,133 @@ const cityData = [
     },
   ];
   
-  const cityInput = document.querySelector('.city-selector__input');
-  const cityList = document.querySelector('.city-selector__list');
-  const resultTable = document.querySelector('.result__table tbody');
-  const totalOutput = document.querySelector('.capacity-total');
-  const genderSelect = document.querySelector('.gender');
-  const ageFrom = document.querySelector('.age-from');
-  const ageTo = document.querySelector('.age-to');
-  
-  let selectedCities = [];
-  
-  cityInput.addEventListener('input', () => {
+ // --- Обработка множественного ввода городов ---
+const cityInput = document.querySelector('.city-selector__input');
+
+function normalizeCityName(name) {
+    const map = {
+        "мск": "Москва",
+        "масква": "Москва",
+        "спб": "Санкт-Петербург",
+        "питер": "Санкт-Петербург",
+        "екб": "Екатеринбург",
+    };
+    const lower = name.trim().toLowerCase();
+    return map[lower] || name.trim();
+}
+
+function parseCities(text) {
+    return text
+        .split(/[\n,]+/)
+        .map(c => normalizeCityName(c))
+        .map(c => c.trim())
+        .filter(c => c.length > 0);
+}
+
+const cityList = document.querySelector('.city-selector__list');
+const resultTable = document.querySelector('.result__table tbody');
+const totalOutput = document.querySelector('.capacity-total');
+const genderSelect = document.querySelector('.gender');
+const ageFrom = document.querySelector('.age-from');
+const ageTo = document.querySelector('.age-to');
+
+let selectedCities = [];
+
+// --- Подсказки городов при вводе ---
+cityInput.addEventListener('input', () => {
     const query = cityInput.value.toLowerCase();
     cityList.innerHTML = '';
+
     if (query.length > 0) {
-      const matches = cityData.filter(city => city.name.toLowerCase().includes(query));
-      matches.forEach(city => {
-        const li = document.createElement('li');
-        li.textContent = city.name;
-        li.classList.add('city-selector__suggestion');
-        li.addEventListener('click', () => {
-          if (!selectedCities.includes(city.name)) {
-            selectedCities.push(city.name);
-            updateResults();
-          }
-          cityInput.value = '';
-          cityList.innerHTML = '';
+        const matches = cityData.filter(city =>
+            city.name.toLowerCase().includes(query)
+        );
+
+        matches.forEach(city => {
+            const li = document.createElement('li');
+            li.textContent = city.name;
+            li.classList.add('city-selector__suggestion');
+
+            li.addEventListener('click', () => {
+                if (!selectedCities.includes(city.name)) {
+                    selectedCities.push(city.name);
+                    updateResults();
+                }
+                cityInput.value = '';
+                cityList.innerHTML = '';
+            });
+
+            cityList.appendChild(li);
         });
-        cityList.appendChild(li);
-      });
     }
-  });
-  
-  function updateResults() {
+});
+
+// --- Основной расчёт ---
+function updateResults() {
     const gender = genderSelect.value;
     const from = parseInt(ageFrom.value);
     const to = parseInt(ageTo.value);
-  
+
+    // Валидация возраста
+    if (from < 0 || from > 75 || to < 0 || to > 75) {
+        alert("Возраст должен быть в пределах 0–75 лет");
+        return;
+    }
+    if (from > to) {
+        alert("Возраст 'от' не может быть больше, чем возраст 'до'");
+        return;
+    }
+
+    // Поддержка множественного ввода городов списком
+    const manualCities = parseCities(cityInput.value);
+
+    manualCities.forEach(c => {
+        if (!selectedCities.includes(c)) {
+            selectedCities.push(c);
+        }
+    });
+
     resultTable.innerHTML = '';
     let total = 0;
-  
+
     selectedCities.forEach(cityName => {
-      const city = cityData.find(c => c.name === cityName);
-      if (!city) return;
-  
-      let cityTotal = 0;
-      for (let age = from; age <= to; age++) {
-        const cap = city.capacity[gender]?.[age];
-        if (cap) {
-          cityTotal += cap;
+        const city = cityData.find(c => c.name.toLowerCase() === cityName.toLowerCase());
+        if (!city) return;
+
+        let cityTotal = 0;
+
+        for (let age = from; age <= to; age++) {
+            const cap = city.capacity[gender]?.[age];
+            if (cap) cityTotal += cap;
         }
-      }
-  
-      total += cityTotal;
-  
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${cityName}</td>
-        <td>${gender}</td>
-        <td>${from}–${to}</td>
-        <td>${cityTotal.toLocaleString()}</td>
-      `;
-      resultTable.appendChild(tr);
+
+        total += cityTotal;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${cityName}</td>
+            <td>${gender}</td>
+            <td>${from}–${to}</td>
+            <td>${cityTotal.toLocaleString()}</td>
+        `;
+        resultTable.appendChild(tr);
     });
-  
+
     totalOutput.textContent = total.toLocaleString();
-  }
+}
 
-  const calcButton = document.querySelector('.calculate');
-calcButton.addEventListener('click', () => {
-  updateResults();
+// --- Кнопка "Рассчитать" ---
+document.querySelector('.calculate').addEventListener('click', () => {
+    updateResults();
 });
 
-const resetButton = document.querySelector('.reset');
-resetButton.addEventListener('click', () => {
-  // Очистка выбранных городов
-  selectedCities = [];
-  
-  // Очистка инпутов
-  cityInput.value = '';
-  genderSelect.selectedIndex = 0;
-  ageFrom.value = '';
-  ageTo.value = '';
-
-  // Очистка таблицы и общей суммы
-  resultTable.innerHTML = '';
-  totalOutput.textContent = '—';
+// --- Кнопка "Сброс" ---
+document.querySelector('.reset').addEventListener('click', () => {
+    selectedCities = [];
+    cityInput.value = '';
+    genderSelect.selectedIndex = 0;
+    ageFrom.value = '';
+    ageTo.value = '';
+    resultTable.innerHTML = '';
+    totalOutput.textContent = '—';
 });
-
-
-  
